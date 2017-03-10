@@ -215,27 +215,26 @@ public class Oberflaeche {
 	private static void printLaufzeit(){
 		System.out.println("");
 		String tempSortName = "";
-		String tempEfford = "";
 		switch (sortOption) {
 		case 0:
 			tempSortName = "Bubble-Sort";
-			tempEfford = "O(n^2)";
 			break;
 		case 1:
 			tempSortName = "Quick-Sort";
-			tempEfford = "O(n*log(n))";
 			break;
 		case 2:
 			tempSortName = "Insertion-Sort";
-			tempEfford = "O(n^2)";
 			break;
 		case 3:
 			tempSortName = "Selection-Sort";
-			tempEfford = "O(n^2)";
 			break;
 		}
+		long[] duration = new long[startSortTime.length];
+		for (int i = 0;i<duration.length;i++)
+		duration[i] = Laufzeit.getDuration(
+				startSortTime[i], endSortTime[i]);
 		System.out.print("Sortiert mit " + tempSortName
-				+ "\nAufwandsklasse im Durchschnitt: " + tempEfford);
+				+ "\nAufwandsklasse im Durchschnitt: " + Laufzeit.calcAufwandsklasse(incedArraySize, duration));
 		System.out.println("");
 		if (countSort > 1) {
 			System.out.println("");
