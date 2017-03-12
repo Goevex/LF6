@@ -22,7 +22,7 @@ public class Laufzeit {
 		if (n.length == duration.length) {
 			aufwandsklasse = "Aufwandsklasse konnte nicht ermittelt werden.";
 			boolean[][] weighArray = new boolean[5][n.length - 1];
-			for (int i = 1; i < n.length; i++) {
+			for (int i = 1; i < n.length - 1; i++) {
 				double tmpN = (double) n[i];
 				double tmpNPrior = (double) n[i - 1];
 				double tmpDuration = (double) duration[i];
@@ -44,58 +44,48 @@ public class Laufzeit {
 				// proprtional zu n
 				// * log(2)
 			}
-			for (int j = 0; j <= 4; j++) {
-				int tmpCountTrue = 0;
-				int tmpCountFalse = 0;
-				for (int i = 0; i < weighArray.length; i++) {
-					if (weighArray[j][i] == true)
-						tmpCountTrue++;
-					else if (weighArray[j][i] == false)
-						tmpCountFalse++;
-				}
-				if (tmpCountTrue > tmpCountFalse)
-					if (aufwandsklasse
-							.equals("Bei der Berechnung der Aufwandsklasse ist ein Fehler aufgetreten.")
-							|| aufwandsklasse
-									.equals("Aufwandsklasse konnte nicht ermittelt werden.")) {
-						aufwandsklasse = "";
-						switch (j) {
-						case 0:
-							aufwandsklasse = "O(1)";
-							break;
-						case 1:
-							aufwandsklasse = "O(N)";
-							break;
-						case 2:
-							aufwandsklasse = "O(N^2)";
-							break;
-						case 3:
-							aufwandsklasse = "O(log2(N))";
-							break;
-						case 4:
-							aufwandsklasse = "O(N*log2(N))";
-							break;
-						}
-					} else {
-						switch (j) {
-						case 0:
-							aufwandsklasse = aufwandsklasse + " ODER O(1)";
-							break;
-						case 1:
-							aufwandsklasse = aufwandsklasse + " ODER O(N)";
-							break;
-						case 2:
-							aufwandsklasse = aufwandsklasse + " ODER O(N^2)";
-							break;
-						case 3:
-							aufwandsklasse = aufwandsklasse
-									+ " ODER O(log2(N))";
-							break;
-						case 4:
-							aufwandsklasse = "ODER O(N*log2(N))";
-							break;
-						}
+
+			int countTrue = 0;
+			int[] tmpCountTrue = new int[5];
+			for (int j = 0; j < 5; j++) {
+				for (int i = 0; i < weighArray[j].length; i++) {
+					if (weighArray[j][i] == true){
+						tmpCountTrue[j]++;
+						countTrue++;
 					}
+				}
+			}
+
+			int maxTrue = tmpCountTrue[0];
+			int maxTrueIndex = -1;
+			for (int i = 1; i < tmpCountTrue.length; i++) {
+				if (tmpCountTrue[i] >= maxTrue) {
+					maxTrue = tmpCountTrue[i];
+					maxTrueIndex = i;
+				}
+			}
+			double oddTrue = (double)tmpCountTrue[maxTrueIndex] / (double)countTrue;
+			aufwandsklasse = "Mit einer Wahrscheinlichkeit von "
+					+ String.format("%.15f",Double.valueOf(oddTrue)*100) + "% ist die Aufwandsklasse ";
+
+			switch (maxTrueIndex) {
+			case 0:
+				aufwandsklasse = aufwandsklasse + "O(1)";
+				break;
+			case 1:
+				aufwandsklasse = aufwandsklasse + "O(N)";
+				break;
+			case 2:
+				aufwandsklasse = aufwandsklasse + "O(N^2)";
+				break;
+			case 3:
+				aufwandsklasse = aufwandsklasse + "O(log2(N))";
+				break;
+			case 4:
+				aufwandsklasse = aufwandsklasse + "O(N*log2(N))";
+				break;
+			default:
+				break;
 			}
 		}
 		return aufwandsklasse;
