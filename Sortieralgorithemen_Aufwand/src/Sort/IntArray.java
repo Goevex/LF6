@@ -11,6 +11,35 @@ public class IntArray {
 
 	private int MaxIndex;
 	private int[] IntArray;
+	
+	private static long startSortTime;
+	private static long endSortTime;
+	private static long duration;
+	
+	
+	public long getDuration() {
+		return duration;
+	}
+
+	public void setDuration(long d) {
+		duration = d;
+	}
+
+	public long getEndSortTime() {
+		return endSortTime;
+	}
+
+	public void setEndSortTime(long endsorttime) {
+		endSortTime = endsorttime;
+	}
+
+	public long getStartSortTime() {
+		return startSortTime;
+	}
+
+	public void setStartSortTime(long startortime) {
+		startSortTime = startortime;
+	}
 
 	public int[] getIntArray() {
 		return IntArray;
@@ -28,14 +57,14 @@ public class IntArray {
 		MaxIndex = maxIndex;
 	}
 
-	public IntArray(int size) {
-		int[] intArray = new int[size];
-		setMaxIndex(size - 1);
-		for (int i = 0; i <= this.MaxIndex; i++) {
-			intArray[i] = new Random().nextInt(1000);
-			IntArray = intArray;
-		}
-	}
+//	public IntArray(int size) {
+//		int[] intArray = new int[size];
+//		setMaxIndex(size - 1);
+//		for (int i = 0; i <= this.MaxIndex; i++) {
+//			intArray[i] = new Random().nextInt(1000);
+//			IntArray = intArray;
+//		}
+//	}
 
 	public IntArray(int size, byte sorted, boolean random) {
 		int[] intArray = new int[size];
@@ -47,7 +76,7 @@ public class IntArray {
 			case UNSORTED:
 				intArray[i] = new Random().nextInt(1000);
 				break;
-			case SORTED_ASC:
+			case SORTED_ASC:  //Please dont try this :/
 				if (random == RANDOM) {
 					if (i != 0)
 						min = intArray[i - 1];
@@ -59,7 +88,7 @@ public class IntArray {
 					intArray[i] = i;
 				}
 				break;
-			case SORTED_DESC:
+			case SORTED_DESC: //either this
 				if (random == RANDOM) {
 					min = 0;
 					if (i != 0)

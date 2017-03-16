@@ -15,10 +15,7 @@ public class Oberflaeche {
 	private static byte sortOption;
 	private static boolean sortDirectionOption;
 	private static boolean randomOption;
-	private static boolean countSortOption;
-
-	private static long[] startSortTime;
-	private static long[] endSortTime;
+//	private static boolean countSortOption;
 
 	public static void main(String[] args) {
 		Scanner scanner = new Scanner(System.in);
@@ -29,28 +26,26 @@ public class Oberflaeche {
 				intArray = new IntArray[countSort];
 				sortedIntArray = new IntArray[countSort];
 				incedArraySize = new int[countSort];
-				startSortTime = new long[countSort];
-				endSortTime = new long[countSort];
 				break;
 			} catch (Exception e) {
 				System.out.println("Ungültige Eingabe!");
 				scanner.next();
 			}
 		}
-		if (countSort > 1)
-			while (true) {
-				System.out
-						.println("Soll die größe der Arrays konstant(K) bleiben oder zunehmen(Z)?");
-				String optCountSortOption = scanner.next();
-				if (optCountSortOption.equalsIgnoreCase("K")) {
-					countSortOption = false;
-					break;
-				} else if (optCountSortOption.equalsIgnoreCase("Z")) {
-					countSortOption = true;
-					break;
-				} else
-					System.out.println("Ungültige Eingabe!");
-			}
+//		if (countSort > 1)
+//			while (true) {
+//				System.out
+//						.println("Soll die größe der Arrays konstant(K) bleiben oder zunehmen(Z)?");
+//				String optCountSortOption = scanner.next();
+//				if (optCountSortOption.equalsIgnoreCase("K")) {
+//					countSortOption = false;
+//					break;
+//				} else if (optCountSortOption.equalsIgnoreCase("Z")) {
+//					countSortOption = true;
+//					break;
+//				} else
+//					System.out.println("Ungültige Eingabe!");
+//			}
 		while (true) {
 			System.out
 					.println("Welche Länge sollen die zu generierenden Arrays haben?");
@@ -62,7 +57,7 @@ public class Oberflaeche {
 				scanner.next();
 			}
 		}
-		if (countSortOption)
+//		if (countSortOption)
 			while (true) {
 				System.out
 						.println("Um welche Länge sollen die Arrays sich nach jedem Durchlauf erhöhen?");
@@ -74,8 +69,8 @@ public class Oberflaeche {
 					scanner.next();
 				}
 			}
-		else
-			incArraySize = 0;
+//		else
+//			incArraySize = 0;
 		while (true) {
 			System.out
 					.println("Sollen die Arrays unsortiert(U) generiert werden?");
@@ -167,7 +162,6 @@ public class Oberflaeche {
 		}
 		for (int i = 0; i < countSort; i++) {
 			try {
-				startSortTime[i] = System.nanoTime();
 				switch (sortOption) {
 				case 0:
 					Sortieralgorithmen.bubbleSort(sortedIntArray[i],
@@ -186,7 +180,7 @@ public class Oberflaeche {
 							sortDirectionOption);
 					break;
 				}
-				endSortTime[i] = System.nanoTime();
+				sortedIntArray[i].setDuration(sortedIntArray[i].getEndSortTime()-sortedIntArray[i].getStartSortTime());
 			} catch (StackOverflowError e) {
 				System.out
 						.println("Ein Fehler ist aufgetreten: Die Array-Länge für diesen Sortieralgorithmus ist zu groß.");
@@ -204,14 +198,15 @@ public class Oberflaeche {
 			System.out.println("");
 			System.out.printf("%-20s", "Original-Array:");
 			intArray[i].print();
-			System.out.printf("%-20s", "Laufzeit: ");
-			System.out.printf("%.9f sek%n", ((double) Laufzeit.getDuration(
-					startSortTime[i], endSortTime[i]) / 1000000000));
+//			System.out.printf("%-20s", "Laufzeit: ");
+//			System.out.printf("%.9f sek%n", ((double) Laufzeit.getDuration(
+//					sortedIntArray[i].getStartSortTime(), sortedIntArray[i].getEndSortTime()) / 1000000000));
 			System.out.printf("%-20s", "Sortiertes-Array:");
 			sortedIntArray[i].print();
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private static void printLaufzeit(){
 		System.out.println("");
 		String tempSortName = "";
@@ -229,18 +224,20 @@ public class Oberflaeche {
 			tempSortName = "Selection-Sort";
 			break;
 		}
-		long[] duration = new long[startSortTime.length];
-		for (int i = 0;i<duration.length;i++)
-		duration[i] = Laufzeit.getDuration(
-				startSortTime[i], endSortTime[i]);
-		System.out.print("Sortiert mit " + tempSortName
-				+ "\nAufwandsklasse im Durchschnitt: " + Laufzeit.calcAufwandsklasse(incedArraySize, duration));
-		System.out.println("");
-		if (countSort > 1) {
-			System.out.println("");
-			System.out.printf("%-20s", "Durchschnittliche Lauftzeit: ");
-			System.out.printf("%.9f sek%n", ((double) Laufzeit
-					.getAverageDuration(startSortTime, endSortTime) / 1000000000));
+		
+		float sizeRatio = (float)incArraySize/(float)arraySize;
+		long[] duration = new long[sortedIntArray.length];
+		for (int i = 0;i<duration.length;i++){
+			duration[i]=sortedIntArray[i].getDuration();
+//			System.out.print("Sortiert mit " + tempSortName
+//				+ "\nAufwandsklasse im Durchschnitt: " + Laufzeit.calcAufwandsklasse(sizeRatio, duration));
 		}
+//		System.out.println("");
+//		if (countSort > 1) {
+//			System.out.println("");
+//			System.out.printf("%-20s", "Durchschnittliche Lauftzeit: ");
+//			System.out.printf("%.9f sek%n", ((double) Laufzeit
+//					.getAverageDuration(startSortTime, endSortTime) / 1000000000));
+//		}
 	}
 }
