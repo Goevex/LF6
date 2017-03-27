@@ -10,7 +10,8 @@ public class mirror {
 	public static void main(String[] args) {
 		BufferedImage actImage = null;
 
-		try { // Load image
+		// Load image
+		try { 
 			actImage = ImageIO.read(new File("img/golang.png"));
 		} catch (IOException e) {
 		}
