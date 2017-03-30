@@ -12,8 +12,18 @@ public class mirror {
 
 		// Load image
 		try { 
-			actImage = ImageIO.read(new File("img/golang.png"));
+			actImage = ImageIO.read(new File("img/image.png"));
 		} catch (IOException e) {
+			try { 
+				actImage = ImageIO.read(new File("img/image.jpg"));
+			} catch (IOException er) {
+				try { 
+					actImage = ImageIO.read(new File("img/image.jpeg"));
+				} catch (IOException err) {
+					System.out.println("Konnte keine Datei Namens image.png, image.jpg oder image.jpeg im img Ordner finden!");
+					System.exit(0);
+				}
+			}
 		}
 
 		int[][] actImagePixel = new int[actImage.getWidth()][actImage
@@ -28,7 +38,7 @@ public class mirror {
 		String mirrorOption = "";
 		int[][] MirroredImagePixel = null;
 		System.out
-				.println("Soll das bild horizontal oder vertikal gespiegelt werden? h / v");
+				.println("Soll das Bild horizontal, vertikal, punkt oder diagonal gespiegelt werden? h / v / p / d");
 		while (true) {
 			mirrorOption = input.next();
 			if (mirrorOption.equalsIgnoreCase("v")) {
@@ -37,8 +47,15 @@ public class mirror {
 			} else if (mirrorOption.equalsIgnoreCase("h")) {
 				MirroredImagePixel = hMirrorIntImage(actImagePixel);
 				break;
-			} else
-				System.out.println("Ungültige Eingabe!");
+			} else if (mirrorOption.equalsIgnoreCase("p")) {
+				int[][] tmpArray=vMirrorIntImage(actImagePixel);
+				MirroredImagePixel = hMirrorIntImage(tmpArray);
+				break;
+			} else if(mirrorOption.equalsIgnoreCase("d")){
+				MirroredImagePixel = dMirrorIntImage(actImagePixel);
+				break;
+			}else
+				System.out.println("UngÃ¼ltige Eingabe!");
 		}
 		input.close();
 
@@ -54,7 +71,7 @@ public class mirror {
 		}
 		
 		if (mirrorOption.equalsIgnoreCase("h")
-				|| mirrorOption.equalsIgnoreCase("v")) {
+				|| mirrorOption.equalsIgnoreCase("v")||mirrorOption.equalsIgnoreCase("p")||mirrorOption.equalsIgnoreCase("d")) {
 			try {// Write Image
 				BufferedImage bi = MirroredImage;
 				File outputfile = new File("img/" + mirrorOption
@@ -62,9 +79,17 @@ public class mirror {
 				ImageIO.write(bi, "png", outputfile);
 			} catch (IOException e) {
 			}
+			String tmpMirrorType="";
+			if(mirrorOption.equalsIgnoreCase("h"))
+				tmpMirrorType="horizontal";
+			else if(mirrorOption.equalsIgnoreCase("v"))
+				tmpMirrorType="verikal";
+			else if(mirrorOption.equalsIgnoreCase("p"))
+				tmpMirrorType="punkt";
+			else if(mirrorOption.equalsIgnoreCase("d"))
+				tmpMirrorType="diagonal";
 			System.out.println("Das Bild wurde erfolgreich "
-					+ (mirrorOption.equalsIgnoreCase("h") ? "horizontal"
-							: "vertikal") + " gespiegelt!");
+					+ tmpMirrorType + " gespiegelt!");
 		} else
 			System.out.println("Hierhin solltest du niemals kommen. WTF!");
 	}
@@ -92,4 +117,17 @@ public class mirror {
 		}
 		return hMirroredImagePixel;
 	}
+	
+	// dMirrorIntImage mirrors diagonal
+		private static int[][] dMirrorIntImage(int[][] actImagePixel) {
+			int[][] hMirroredImagePixel = new int[actImagePixel[0].length][actImagePixel.length];
+			for (int j = 0; j < hMirroredImagePixel.length; j++) {
+				for (int i = 0; i < hMirroredImagePixel[j].length; i++) {
+					hMirroredImagePixel[i][j] = actImagePixel[hMirroredImagePixel.length
+					                  						- j - 1][hMirroredImagePixel.length
+							- i - 1];
+				}
+			}
+			return hMirroredImagePixel;
+		}
 }
